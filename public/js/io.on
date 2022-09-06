@@ -1,0 +1,42 @@
+io.on('connection',  async socket=>{
+  socket.emit('products', await products.getAll());
+  socket.emit('messages', await messages.getAll());
+
+
+  // socket.on('newProduct', (newProduct) => {
+  //   products.save(newProduct).then(() => {
+  //     products.getAll().then((products) => {
+  //       io.sockets.emit('products', products);
+  //     });
+  //   });
+  // });
+
+
+  socket.on('newProduct', async (newProduct) => {
+    await products.save(newProduct)
+    io.sockets.emit('products', await products.getAll());
+  });
+
+  socket.emit('products', products.getAll());
+  socket.emit('messages', messages.getAll());
+
+  socket.on('newProduct', (newProduct) => {
+    products.save(newProduct)
+    io.sockets.emit('products', products.getAll());
+  });
+
+  // socket.on('newMessage', (message) => {
+  //   messages.save(message).then(() => {
+  //     messages.getAll().then((messages) => {
+  //       io.sockets.emit('messages', messages);
+  //     });
+  //   });
+  // });
+
+  socket.on('newMessage', async (message) => {
+    await messages.save(message)
+    io.sockets.emit('messages', await messages.getAll());
+  socket.on('newMessage', async (newMessage) => {
+    messages.save(newMessage)
+    io.sockets.emit('messages', messages.getAll());
+  });
